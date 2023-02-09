@@ -21,6 +21,21 @@ function init() {
         ],
         target: "js-map"
     })
+
+    const popupContainerElement = document.getElementById('popup-coordinates')
+    const popup = new ol.Overlay({
+        element: popupContainerElement,
+        positioning: 'center-left' // leaves the start of the coordinates coordinates right on the cursor pointer and it reads to the right (instead of below it)
+    })
+
+    map.addOverlay(popup)
+
+    map.on('click', function(e){
+        const clickedCoordinate = e.coordinate
+        popup.setPosition(undefined); // hides the position -- prevents several popups when clicking multiple times
+        popup.setPosition(clickedCoordinate)
+        popupContainerElement.innerHTML = clickedCoordinate
+    })
 }
 
 // init() line 5 instead
