@@ -26,20 +26,22 @@ function init() {
 
     const map = new ol.Map({
         view: new ol.View({
-            center: [-12080385, 7567433],
+            center: [ 0, 0 ],
             zoom: 3,
+            // extent: [12400753.576694038, -5658730.000549673, 17174426.336716905, -980228.5067132516],
             // maxZoom: 12, // zoom restrictions
             // minZoom: 2, // zoom restrictions
             // rotation: 0,
             // // rotation: 0.5 // rotates in clockwise direction. arrow in top right corner will reset rotation
-            extent: [12391470.089912523, -5650678.772867478, 17494241.27714418, -961725.7097416269] // values are [minx, miny, maxx, maxy] (far left, bottom, far right, top). setting this will not allow user to pan outside of set coordinates.
+            // extent: [12391470.089912523, -5650678.772867478, 17494241.27714418, -961725.7097416269] // values are [minx, miny, maxx, maxy] (far left, bottom, far right, top). setting this will not allow user to pan outside of set coordinates.
         }),
         layers: [
             new ol.layer.Tile({
                 source: new ol.source.OSM(), // OSM = OpenStreetMap
                 zIndex: 1, // highest number will be on top!
-                visible: true, // set to true by default
-                extent: [12391470.089912523, -5650678.772867478, 17494241.27714418, -961725.7097416269], // values are [minx, miny, maxx, maxy] (far left, bottom, far right, top)
+                visible: false, // set to true by default
+                extent: [12400753.576694038, -5658730.000549673, 17174426.336716905, -980228.5067132516],
+                // extent: [12391470.089912523, -5650678.772867478, 17494241.27714418, -961725.7097416269], // values are [minx, miny, maxx, maxy] (far left, bottom, far right, top)
                 opacity: 0.5,
             })
         ],
@@ -65,17 +67,62 @@ function init() {
                     url: 'https://{a-c}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png'
                 }),
                 zIndex: 0,
-                visible: true, // set to true by default
-                extent: [12391470.089912523, -5650678.772867478, 17494241.27714418, -961725.7097416269], // values are [minx, miny, maxx, maxy] (far left, bottom, far right, top)
+                visible: false, // set to true by default
+                // extent: [12400753.576694038, -5658730.000549673, 17174426.336716905, -980228.5067132516],
+                // extent: [12391470.089912523, -5650678.772867478, 17494241.27714418, -961725.7097416269], // values are [minx, miny, maxx, maxy] (far left, bottom, far right, top)
                 opacity: 0.5,
+            }),
+            // Bing Maps Basemap Layer
+            new ol.layer.Tile({
+                source: new ol.source.BingMaps({
+                    key: 'AuZu48QTf4LDbLHuNfxbMD2HEOu-QRtfBrbCDhS3QeFwU4XEzMyPsFuVtvGHKUzO', // requires a key to use BingMaps!! bingmapsportal.com
+                    imagerySet: 'AerialWithLabels', // other options include AerialWithLabels, Road, CanvasDark, CanvasGray, OrdnanceSurvey(not working)
+                }),
+                visible: true,
             })
         ]
     })
-    map.addLayer(layerGroup)
+    map.addLayer(layerGroup);
+
+    // CartoDB BaseMap Layer
+    const cartoDBBaseLayer = new ol.layer.Tile({
+        source: new ol.source.XYZ({
+            url: 'https://{s}.basemaps.cartocdn.com/{style}/{z}/{x}/{y}{scale}.png'
+            // STYLE OPTIONS: 
+                // light_all,
+                // dark_all,
+                // light_nolabels,
+                // light_only_labels,
+                // dark_nolabels,
+                // dark_only_labels,
+                // rastertiles/voyager,
+                // rastertiles/voyager_nolabels,
+                // rastertiles/voyager_only_labels,
+                // rastertiles/voyager_labels_under
+        })
+    })
+
+    // Base Vector Layers
+    // Vector Tile Layer OpenStreetMap
+    // const openstreetMapVectorTile = new ol.layer.VectorTile({
+    //     source: new ol.source.VectorTile({
+    //         url: 'https://api.maptiler.com/tiles/v3/{z}/{x}/{y}.pbf?key=eNZMd85Lie6HD3TUfd5e',
+    //         format: new ol.format.MVT(),
+    //         attributions: '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>',
+    //         visible: false,
+    //         title: 'VectorTileLayersOpenstreetMap'
+    //     })
+    // })
+
+    // map.addLayer(openstreetMapVectorTile);
 
     map.on('click', function(e) {
         console.log(e.coordinate);
     })
+
+    // map.on('click', function(e) {
+    //     console.log(e);
+    // })
     
 
 //     console.log(ol.control.defaults());
