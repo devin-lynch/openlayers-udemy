@@ -78,16 +78,16 @@ function init() {
                     key: 'AuZu48QTf4LDbLHuNfxbMD2HEOu-QRtfBrbCDhS3QeFwU4XEzMyPsFuVtvGHKUzO', // requires a key to use BingMaps!! bingmapsportal.com
                     imagerySet: 'AerialWithLabels', // other options include AerialWithLabels, Road, CanvasDark, CanvasGray, OrdnanceSurvey(not working)
                 }),
-                visible: true,
+                visible: false,
             })
         ]
     })
     map.addLayer(layerGroup);
 
-    // CartoDB BaseMap Layer
+    // CartoDB BaseMap Layer (https://openlayers.org/en/latest/apidoc/module-ol_source_CartoDB-CartoDB.html)
     const cartoDBBaseLayer = new ol.layer.Tile({
         source: new ol.source.XYZ({
-            url: 'https://{s}.basemaps.cartocdn.com/{style}/{z}/{x}/{y}{scale}.png'
+            url: 'http://{1-4}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}.png'
             // STYLE OPTIONS: 
                 // light_all,
                 // dark_all,
@@ -99,8 +99,19 @@ function init() {
                 // rastertiles/voyager_nolabels,
                 // rastertiles/voyager_only_labels,
                 // rastertiles/voyager_labels_under
-        })
+        }),
+        visible: true
     })
+    map.addLayer(cartoDBBaseLayer)
+
+    // TileDebug -- not working currently
+    const tileDebugSource = new ol.source.TileDebug()
+    const tileDebugLayer = new ol.layer.Tile({
+        source: tileDebugSource,
+        visible: false,
+    })
+    map.addLayer(tileDebugLayer)
+
 
     // Base Vector Layers
     // Vector Tile Layer OpenStreetMap
